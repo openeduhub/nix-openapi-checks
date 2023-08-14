@@ -1,4 +1,4 @@
-{nixpkgs, system, pkgs, pkgs-unstable, web-bin}:
+{nixpkgs, system, pkgs, pkgs-unstable, web-bin, memorySize}:
 let
   # Single source of truth for all tutorial constants
   username  = "testing";
@@ -13,6 +13,8 @@ nixos-lib.runTest
     hostPkgs = pkgs;
     nodes = {
       server = { config, pkgs, ... }: {
+        # set the memory size
+        virtualisation.memorySize = memorySize;
         # Open the default port for the web service in the firewall
         networking.firewall.allowedTCPPorts = [ servicePort ];
         # create a user under which to run the service
