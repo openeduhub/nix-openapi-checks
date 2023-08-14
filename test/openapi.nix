@@ -1,9 +1,8 @@
-{nixpkgs, system, pkgs, pkgs-unstable, web-bin, memorySize}:
+{nixpkgs, system, pkgs, pkgs-unstable, serviceBin, openapiDomain, memorySize}:
 let
   # Single source of truth for all tutorial constants
   username  = "testing";
   servicePort = 8080;
-  openapiDomain = "openapi.json";
 
   nixos-lib = import (nixpkgs + "/nixos/lib") { };
 in
@@ -36,7 +35,7 @@ nixos-lib.runTest
         systemd.services.web-service = {
           wantedBy = [ "multi-user.target" ];
           script = ''
-            ${web-bin} --port=${builtins.toString servicePort}
+            ${serviceBin} --port=${builtins.toString servicePort}
           '';
           serviceConfig.User = username;
         };

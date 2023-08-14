@@ -15,9 +15,12 @@
         
       in {
         lib = {
-          openapi-valid = {web-bin, memorySize ? 1024}:
+          openapi-valid = { serviceBin
+                          , openapiDomain ? "openapi.json"
+                          , memorySize ? 1024
+                          }:
             import ./test/openapi.nix {
-              inherit nixpkgs system pkgs pkgs-unstable web-bin memorySize;
+              inherit nixpkgs system pkgs pkgs-unstable serviceBin openapiDomain memorySize;
             };
         };
       });
