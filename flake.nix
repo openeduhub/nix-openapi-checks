@@ -14,14 +14,15 @@
         pkgs-unstable = import nixpkgs-unstable {inherit system;};
         
       in {
-        lib = {
-          openapi-valid = { serviceBin
-                          , openapiDomain ? "openapi.json"
-                          , memorySize ? 1024
-                          }:
-            import ./test/openapi.nix {
-              inherit nixpkgs system pkgs pkgs-unstable serviceBin openapiDomain memorySize;
-            };
-        };
+        lib =
+          { test-service = {
+              serviceBin
+              , openapiDomain ? "openapi.json"
+              , memorySize ? 1024
+            }:
+              import ./test/test-service.nix {
+                inherit nixpkgs system pkgs pkgs-unstable serviceBin openapiDomain memorySize;
+              };
+          };
       });
 }
