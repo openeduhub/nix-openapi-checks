@@ -1,10 +1,5 @@
-{ config
-, pkgs
-, memorySize
-, username
-, ...
-}:
-
+{ memorySize ? 1024 , username ? "username"}:
+{ pkgs , ...}:
 {
   config = {
     # set the memory size

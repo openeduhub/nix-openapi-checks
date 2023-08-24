@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    auto-openapi-tests.url = "github:openeduhub/auto-openapi-tests";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
@@ -12,24 +13,22 @@
       let
         pkgs = import nixpkgs { inherit system; };
         pkgs-unstable = import nixpkgs-unstable { inherit system; };
-        
-      in {
-        lib =
-          { test-service =
-              { serviceBin
-              , openapiDomain ? "openapi.json"
-              , memorySize ? 1024
-              }:
-              import ./test/test-service.nix
-                { inherit nixpkgs system pkgs pkgs-unstable
-                  serviceBin openapiDomain memorySize;
-                };
 
-            test-file =
-              { openapiFile } :
-              import ./test/test-file.nix
-                { inherit nixpkgs system pkgs pkgs-unstable openapiFile; };
-              
-          };
+      in
+      {
+        lib = {
+          test-service =
+            { serviceBin, openapiDomain ? "openapi.json", memorySize ? 1024 }:
+            import ./test/test-service.nix {
+              inherit nixpkgs system pkgs pkgs-unstable serviceBin openapiDomain
+                memorySize;
+              auto-openapi-tests = self.inputs.auto-openapi-tests.packages.${system}.default;
+            };
+
+          test-file = { openapiFile }:
+            import ./test/test-file.nix {
+              inherit nixpkgs system pkgs pkgs-unstable openapiFile;
+            };
+        };
       });
 }
