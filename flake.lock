@@ -7,11 +7,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1692887726,
-        "narHash": "sha256-nCCAECDaT5QL78egOXdeEP0s5w0mXY0CWfcW0wOdY7k=",
+        "lastModified": 1692958311,
+        "narHash": "sha256-liqQ/Y/o6XPYYJUI/uswgVubp0Csdnj5R5jnCPnlQl8=",
         "owner": "openeduhub",
         "repo": "auto-openapi-tests",
-        "rev": "7d53621f679558f13d44907eea4f1a7c8d2b4682",
+        "rev": "632ca342ed68672436d0b1dbd5d791db8a5dede2",
         "type": "github"
       },
       "original": {
