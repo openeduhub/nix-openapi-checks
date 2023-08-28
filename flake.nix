@@ -23,11 +23,12 @@
             , openapi-domain ? "openapi.json"
             , memory-size ? 1024
             , skip-endpoints ? [ ]
+            , cache-dir ? "disabled"
             }:
             import ./test/test-service.nix {
               inherit nixpkgs system pkgs pkgs-unstable
                 service-bin service-port openapi-domain memory-size
-                skip-endpoints;
+                skip-endpoints cache-dir;
               auto-openapi-tests =
                 self.inputs.auto-openapi-tests.packages.${system}.default;
             };

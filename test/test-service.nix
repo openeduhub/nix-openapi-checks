@@ -8,6 +8,7 @@
 , service-port ? 8080
 , openapi-domain ? "openapi.json"
 , skip-endpoints ? [ ]
+, cache-dir ? "disabled"
 }:
 
 let
@@ -57,8 +58,9 @@ nixos-lib.runTest
       "${auto-openapi-tests}/bin/auto-openapi-tests",
       "--api=\"http://server:${builtins.toString service-port}\"",
       "--spec-loc=\"${openapi-domain}\"",
+      "--cache-dir=\"${cache-dir}\"",
       "--skip-endpoints",
-      " ".join(skipped_endpoints)
+      " ".join(skipped_endpoints),
     ]))
   '';
 }
