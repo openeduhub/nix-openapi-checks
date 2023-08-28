@@ -2,16 +2,17 @@
 , system
 , pkgs
 , pkgs-unstable ? pkgs
-, serviceBin
-, openapiDomain
-, memorySize
 , auto-openapi-tests
+, memory-size ? 1024
+, service-bin
+, service-port ? 8080
+, openapi-domain ? "openapi.json"
+, skip-endpoints ? [ ]
 }:
 
 let
   # Single source of truth
   username = "testing";
-  servicePort = 8080;
 
   nixos-lib = import (nixpkgs + "/nixos/lib") { };
 in
@@ -23,17 +24,17 @@ nixos-lib.runTest
     server =
       { config, pkgs, ... }:
       {
-        imports = [ (import ./server.nix { inherit memorySize username; }) ];
+        imports = [ (import ./server.nix { inherit memory-size username; }) ];
         config =
           {
             # Open the default port for the web service in the firewall
-            networking.firewall.allowedTCPPorts = [ servicePort ];
+            networking.firewall.allowedTCPPorts = [ service-port ];
             # start the web service
             systemd.services.web-service =
               {
                 wantedBy = [ "multi-user.target" ];
                 script = ''
-                  ${serviceBin} --port=${builtins.toString servicePort}
+                  ${service-bin}
                 '';
                 serviceConfig.User = username;
               };
@@ -47,13 +48,17 @@ nixos-lib.runTest
   testScript = ''
     start_all()
 
-    server.wait_for_open_port(${builtins.toString servicePort})
+    server.wait_for_open_port(${builtins.toString service-port})
 
+    skipped_endpoints = "${builtins.toString skip-endpoints}".split(" ")
+    skipped_endpoints = [ f'"{x}"' for x in skipped_endpoints ]
     client.succeed(" ".join(
     [
       "${auto-openapi-tests}/bin/auto-openapi-tests",
-      "--api=\"http://server:${builtins.toString servicePort}\"",
-      "--spec-loc=\"${openapiDomain}\""
+      "--api=\"http://server:${builtins.toString service-port}\"",
+      "--spec-loc=\"${openapi-domain}\"",
+      "--skip-endpoints",
+      " ".join(skipped_endpoints)
     ]))
   '';
 }

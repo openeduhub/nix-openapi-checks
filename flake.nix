@@ -18,16 +18,21 @@
       {
         lib = {
           test-service =
-            { serviceBin, openapiDomain ? "openapi.json", memorySize ? 1024 }:
+            { service-bin
+            , openapi-domain ? "openapi.json"
+            , memory-size ? 1024
+            , skip-endpoints ? [ ]
+            }:
             import ./test/test-service.nix {
-              inherit nixpkgs system pkgs pkgs-unstable serviceBin openapiDomain
-                memorySize;
-              auto-openapi-tests = self.inputs.auto-openapi-tests.packages.${system}.default;
+              inherit nixpkgs system pkgs pkgs-unstable
+                service-bin openapi-domain memory-size skip-endpoints;
+              auto-openapi-tests =
+                self.inputs.auto-openapi-tests.packages.${system}.default;
             };
 
-          test-file = { openapiFile }:
+          test-file = { openapi-file }:
             import ./test/test-file.nix {
-              inherit nixpkgs system pkgs pkgs-unstable openapiFile;
+              inherit nixpkgs system pkgs pkgs-unstable openapi-file;
             };
         };
       });
