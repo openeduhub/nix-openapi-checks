@@ -19,13 +19,15 @@
         lib = {
           test-service =
             { service-bin
+            , service-port
             , openapi-domain ? "openapi.json"
             , memory-size ? 1024
             , skip-endpoints ? [ ]
             }:
             import ./test/test-service.nix {
               inherit nixpkgs system pkgs pkgs-unstable
-                service-bin openapi-domain memory-size skip-endpoints;
+                service-bin service-port openapi-domain memory-size
+                skip-endpoints;
               auto-openapi-tests =
                 self.inputs.auto-openapi-tests.packages.${system}.default;
             };
