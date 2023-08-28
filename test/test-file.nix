@@ -2,7 +2,7 @@
 , system
 , pkgs
 , pkgs-unstable ? pkgs
-, openapiFile
+, openapi-file
 }:
 
 let
@@ -20,7 +20,7 @@ nixos-lib.runTest
       start_all()
       # ensure that the api is valid
       client.succeed(
-        "${pkgs-unstable.swagger-cli}/bin/swagger-cli validate ${openapiFile}"
+        "${pkgs-unstable.swagger-cli}/bin/swagger-cli validate ${openapi-file}"
       )
     '';
   }

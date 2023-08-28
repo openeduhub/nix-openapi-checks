@@ -1,9 +1,9 @@
-{ memorySize ? 1024 , username ? "username"}:
+{ memory-size ? 1024 , username ? "username"}:
 { pkgs , ...}:
 {
   config = {
     # set the memory size
-    virtualisation.memorySize = memorySize;
+    virtualisation.memorySize = memory-size;
     # create a default user
     users = {
       mutableUsers = false;
