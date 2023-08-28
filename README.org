@@ -1,0 +1,40 @@
+#+title: nix-openapi-checks
+#+EXPORT_EXCLUDE_TAGS: noexport
+
+[[https://nixos.org/][Nix]] Flake checks to verify the integrity and functionality of web-services with [[https://www.openapis.org/][OpenAPI]] specifications.
+
+When added to a Nix Flake, tests provided by [[https://github.com/openeduhub/auto-openapi-tests]] will be run within a NixOS virtual machine whenever ~nix flake check~ is invoked.
+
+* Usage
+
+Add this repository to your Flake's inputs:
+#+begin_src nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    openapi-checks = {
+      url = "github:openeduhub/nix-openapi-checks";
+      inputs.nixpkgs.follows = "nixpkgs"; # optional
+    };
+  };
+}
+#+end_src
+
+Then, add the checks you want to add to ~outputs.checks~:
+#+begin_src nix
+{
+  inputs = { ... };
+  outputs = { self, nixpkgs, openapi-checks, ... };
+  let system = "x86_64-linux";
+  in
+    checks.${system} = {
+      test-service = openapi-checks.lib.${system}.test-service {
+        service-bin = "${my-web-service}/bin/my-web-service-bin";
+        service-port = 8080;
+        openapi-domain = "/openapi.json";
+      };
+    };
+}
+#+end_src
+
+In the example above, the web-service ~my-web-service~ would now be started in a NixOS virtual machine and all of its endpoints would be tested when ~nix flake check~ is run.
