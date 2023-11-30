@@ -12,9 +12,6 @@
 }:
 
 let
-  # Single source of truth
-  username = "testing";
-
   nixos-lib = import (nixpkgs + "/nixos/lib") { };
 in
 nixos-lib.runTest
@@ -25,7 +22,7 @@ nixos-lib.runTest
     server =
       { config, pkgs, ... }:
       {
-        imports = [ (import ./server.nix { inherit memory-size username; }) ];
+        imports = [ (import ./server.nix { inherit memory-size; }) ];
         config =
           {
             # Open the default port for the web service in the firewall
@@ -37,7 +34,6 @@ nixos-lib.runTest
                 script = ''
                   ${service-bin}
                 '';
-                serviceConfig.User = username;
               };
           };
       };
