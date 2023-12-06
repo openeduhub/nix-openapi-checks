@@ -2,18 +2,18 @@
   description = "Checks for web services that implement OpenAPI";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
-    auto-openapi-tests.url = "github:openeduhub/auto-openapi-tests";
+    auto-openapi-tests = {
+      url = "github:openeduhub/auto-openapi-tests";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
       let
-        pkgs = import nixpkgs { inherit system; };
-        pkgs-unstable = import nixpkgs-unstable { inherit system; };
-
+        pkgs = nixpkgs.legacyPackages.${system};
       in
       {
         lib = {
@@ -26,7 +26,7 @@
             , cache-dir ? "disabled"
             }:
             import ./test/test-service.nix {
-              inherit nixpkgs system pkgs pkgs-unstable
+              inherit nixpkgs system pkgs
                 service-bin service-port openapi-domain memory-size
                 skip-endpoints cache-dir;
               auto-openapi-tests =
@@ -35,7 +35,7 @@
 
           test-file = { openapi-file }:
             import ./test/test-file.nix {
-              inherit nixpkgs system pkgs pkgs-unstable openapi-file;
+              inherit nixpkgs system pkgs openapi-file;
             };
         };
       });

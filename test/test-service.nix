@@ -1,7 +1,6 @@
 { nixpkgs
 , system
 , pkgs
-, pkgs-unstable ? pkgs
 , auto-openapi-tests
 , memory-size ? 1024
 , service-bin
