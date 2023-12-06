@@ -7,6 +7,7 @@
     auto-openapi-tests = {
       url = "github:openeduhub/auto-openapi-tests";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
   };
 
