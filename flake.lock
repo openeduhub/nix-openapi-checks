@@ -11,11 +11,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1701854814,
-        "narHash": "sha256-8THbr/DlYUTTj/a+pZDpWfjLwyoGDh9tvHK32MkZ5kw=",
+        "lastModified": 1701948661,
+        "narHash": "sha256-IRrhoeKoVI3GReh32/TDLT/fuqsgUq6A8WHqmJvuEpc=",
         "owner": "openeduhub",
         "repo": "auto-openapi-tests",
-        "rev": "275148326092f2f61d6534239e22102d39019600",
+        "rev": "3dcff8218275d9b623c0d92c4686c0e0469454df",
         "type": "github"
       },
       "original": {
